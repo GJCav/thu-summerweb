@@ -4,13 +4,13 @@
 
 电脑端效果：
 
-<img src="D:\computer\project\thu-summerweb\.typora\image-20220706105809844.png" alt="image-20220706105809844" style="zoom:50%;" />
+<img src=".typora\image-20220706105809844.png" alt="image-20220706105809844" style="zoom:50%;" />
 
 
 
 手机端效果：
 
-<img src="D:\computer\project\thu-summerweb\.typora\image-20220706113704845.png" alt="image-20220706113704845" style="zoom:30%;" />
+<img src=".typora\image-20220706113704845.png" alt="image-20220706113704845" style="zoom:30%;" />
 
 
 
@@ -18,7 +18,7 @@
 
 ### 快速访问
 
-使用浏览器打开 [https://hw1-websummer.gjm20.top](https://hw1-websummer.gjm20.top/)，即可查看效果。
+使用浏览器打开 https://hw1-websummer.gjm20.top，即可查看效果。
 
 注：因为网站托管在 Cloudflare 下，加载速度可能较慢。
 
@@ -77,9 +77,9 @@ yarn dev -o
 
 效果展示：
 
-* 紫色：<img src="D:\computer\project\thu-summerweb\.typora\image-20220706120721975.png" alt="image-20220706120721975" style="zoom:40%;" />
+* 紫色：<img src=".typora\image-20220706120721975.png" alt="image-20220706120721975" style="zoom:40%;" />
 
-* 蓝色：<img src="D:\computer\project\thu-summerweb\.typora\image-20220706120931527.png" alt="image-20220706120931527" style="zoom:40%;" />
+* 蓝色：<img src=".typora\image-20220706120931527.png" alt="image-20220706120931527" style="zoom:40%;" />
 
  美中不足：因为流量使用条被单独放在一个组件中，不能随主题改变颜色，后续可以把配色独立成一个全局sass文件，实现统一配色。
 
@@ -87,7 +87,7 @@ yarn dev -o
 
 ### 对话框的三角
 
-<img src="D:\computer\project\thu-summerweb\.typora\image-20220706121250282.png" alt="image-20220706121250282" style="zoom:50%;" />
+<img src=".typora\image-20220706121250282.png" alt="image-20220706121250282" style="zoom:50%;" />
 
 核心思路：搞一个正方形的框，背景纯色填充，然后`clip-path: polygon(0 0, 100% 0, 0 100%);`
 
@@ -95,7 +95,7 @@ yarn dev -o
 
 ### 流量条
 
-<img src="D:\computer\project\thu-summerweb\.typora\image-20220706121507028.png" alt="image-20220706121507028" style="zoom:50%;" />
+<img src=".typora\image-20220706121507028.png" alt="image-20220706121507028" style="zoom:50%;" />
 
 独立成一个组件，位于`components/VolumeBar.vue`，具备一定的可复用性。
 
@@ -110,7 +110,7 @@ yarn dev -o
 
 ### 阴影
 
-<img src="D:\computer\project\thu-summerweb\.typora\image-20220706122047620.png" alt="image-20220706122047620" style="zoom:50%;" />
+<img src=".typora\image-20220706122047620.png" alt="image-20220706122047620" style="zoom:50%;" />
 
 官方网站的实现方法是放一个图片在那里，太麻烦了，可以纯 css 实现：
 
@@ -134,7 +134,7 @@ yarn dev -o
 
 ### 小图标
 
-<img src="D:\computer\project\thu-summerweb\.typora\image-20220706122405824.png" alt="image-20220706122405824" style="zoom:80%;" />
+<img src=".typora\image-20220706122405824.png" alt="image-20220706122405824" style="zoom:80%;" />
 
 右对齐布局：flex justify-content: right
 
