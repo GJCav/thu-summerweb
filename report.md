@@ -18,7 +18,7 @@
 
 ### 快速访问
 
-使用浏览器打开 https://hw1-websummer.gjm20.top，即可查看效果。
+使用浏览器打开 https://hw1-websummer.gjm20.top
 
 注：因为网站托管在 Cloudflare 下，加载速度可能较慢。
 
