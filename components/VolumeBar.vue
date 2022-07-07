@@ -24,8 +24,7 @@ interface IProps{
 
 const props = withDefaults(defineProps<IProps>(), {
   prompt_text: () => ["", "20", "30", "40", "50"],
-  value: 0,
-  bar_color: "#fbb03b"
+  value: 0
 });
 
 const bar_style = computed(() => {
@@ -33,8 +32,7 @@ const bar_style = computed(() => {
   val = val >= 0 ? val : 0
   val = val <= 100 ? val : 100
   return {
-    width: `${val}%`,
-    "background-color": props.bar_color
+    width: `${val}%`
   }
 });
 
@@ -42,6 +40,7 @@ const bar_style = computed(() => {
 
 <style scoped lang="scss">
 @use "sass:list";
+@use "~/assets/style.scss";
 
 .container{
   display: grid;
@@ -66,6 +65,8 @@ const bar_style = computed(() => {
     grid-row: 2;
     grid-column: 1/5;
     height: 25px;
+
+    background-color: lighten(style.$theme-color, 30%);
   }
 }
 
