@@ -1,48 +1,46 @@
-# 作业 1 报告
+# 作业 2 报告
 
 ## 效果呈现
 
 电脑端效果：
 
-<img src=".typora\image-20220706105809844.png" alt="image-20220706105809844" style="zoom:50%;" />
+<img src=".typora\image-20220707223452146.png" alt="image-20220707223452146" style="zoom:50%;" />
+
+
 
 
 
 手机端效果：
 
-<img src=".typora\image-20220706113704845.png" alt="image-20220706113704845" style="zoom:30%;" />
+<img src=".typora/image-20220707223613514.png" alt="image-20220707223613514" style="zoom:50%;" />
 
 
 
 ## 使用说明
 
+### 测试账号与API
+
+内置两个账号`alice`、`bob`，密码和账号名相同，若在测试过程中发现已用流量数值过大，可以访问 https://hw2-websummer.gjm20.top/api/reset 来重置流量记录
+
+
+
 ### 快速访问
 
-使用浏览器打开 https://hw1-websummer.gjm20.top，即可查看效果。
+使用浏览器打开 https://hw2-websummer.gjm20.top，即可查看效果。
 
-注：因为网站托管在 Cloudflare 下，加载速度可能较慢。
-
-
-
-### 从源代码开始
-
-使用`yarn`进行包管理，使用`npm`会遇到一些奇怪的依赖问题：
-
-```bash
-git clone https://github.com/GJCav/thu-summerweb.git
-cd thu-summerweb
-git checkout homework1
-yarn install
-yarn dev -o
-```
+注：因为是使用自己的服务器托管的，是一个5Mbps的小水管，加载速度可能较慢。
 
 
+
+### 从源码构建
 
 本项目使用到的框架：
 
 * `Nuxt3`：基于Vue3的框架，能自动完成SSR、路由等一系列繁琐但重要的功能
 * `Voca.js`：JS 中的字符串格式化
 * `sass`：让写CSS的血压稍稍降低
+* `flask`：后端框架
+* `eventlet`：支持高并发的 WSGI 容器
 
 
 
@@ -53,91 +51,98 @@ yarn dev -o
 
 
 
-## 实现思路
+使用`yarn`进行包管理，使用`npm`会遇到一些奇怪的依赖问题，下面先安装各种依赖：
 
-### 垂直居中效果
+```bash
+git clone https://github.com/GJCav/thu-summerweb.git
+cd thu-summerweb
+git checkout homework2
+yarn install
 
-解决方式：html, body 的 height 设为 100% ，然后通过 flex 实现垂直居中
-
-
-
-### 各个框的重叠效果
-
-解决方式：`position: absolute`，设置`z-index`，然后用 `margin` 完成定位
-
-
-
-### 配色效果
-
-难点：统一设置主题色，然后从主题色衍生出较深和较浅的颜色。
-
-解决：使用SASS中的变量和`darken`、`lighten`函数，完成css内的配色统一
-
-切换配色：打开`pages/index.vue`，找到`$theme-color: xxx;` 一行，修改后面的颜色值即可。
-
-效果展示：
-
-* 紫色：<img src=".typora\image-20220706120721975.png" alt="image-20220706120721975" style="zoom:40%;" />
-
-* 蓝色：<img src=".typora\image-20220706120931527.png" alt="image-20220706120931527" style="zoom:40%;" />
-
- 美中不足：因为流量使用条被单独放在一个组件中，不能随主题改变颜色，后续可以把配色独立成一个全局sass文件，实现统一配色。
-
-
-
-### 对话框的三角
-
-<img src=".typora\image-20220706121250282.png" alt="image-20220706121250282" style="zoom:50%;" />
-
-核心思路：搞一个正方形的框，背景纯色填充，然后`clip-path: polygon(0 0, 100% 0, 0 100%);`
-
-
-
-### 流量条
-
-<img src=".typora\image-20220706121507028.png" alt="image-20220706121507028" style="zoom:50%;" />
-
-独立成一个组件，位于`components/VolumeBar.vue`，具备一定的可复用性。
-
-使用 Grid 布局实现，是一个 2x7 的 grid，第二行背景深浅不一的方块用 div+背景色填充实现，黄色进度条用另一个 div 重叠在第二行上实现。
-
-组件接受以下 props：
-
-* `prompt_text`：grid 第一行的数字标识，默认为 `["", "20", "30", "40", "50"]`
-* `value`：黄色条的宽度，范围 [0, 1]，为 1 时黄色条填满流量条
-
-
-
-### 阴影
-
-<img src=".typora\image-20220706122047620.png" alt="image-20220706122047620" style="zoom:50%;" />
-
-官方网站的实现方法是放一个图片在那里，太麻烦了，可以纯 css 实现：
-
-```css
-.pannel-shadow {
-    height: 20px;
-    width: 80px;
-    background: radial-gradient(#9a9a9a 0%, #dcdcdcab 80%, transparent 100%);
-    filter: blur(3px);
-    transform: scale(3.5, 1) translate(40px, 4px);
-}
+pip3 install -r requirements.txt
 ```
 
-核心是：
-
-* 背景渐变填充灰色
-* `transform`  变形成扁扁的椭圆阴影
-* `filter` 加上模糊，让阴影更真实
 
 
+因为要处理 CORS，作业2的部署有些麻烦，可有如下两种部署方式：
 
-### 小图标
+* Flask 处理静态资源：步骤较少，但vue3-router会有一些奇怪的行为(*)
+* 完整部署：完整的生产级别服务器部署方案，比较繁琐
 
-<img src=".typora\image-20220706122405824.png" alt="image-20220706122405824" style="zoom:80%;" />
+(*) 如果直接访问`/success`会返回404，但从`/`内部点连接到`/success`则能够正确渲染网页，这个bug源于vue3 router的限制。
 
-右对齐布局：flex justify-content: right
 
-图标：从 Font Awesome 和 Bootstrap Font 找 svg 代码
 
-颜色：修改 path 标签的 fill 属性
+**Flask 处理静态资源**
+
+```bash
+yarn generate
+export STATIC_HOST=1    # $env:STATIC_HOST=1     ,if using powershell
+export FLASK_PORT=3000  # $env:FLASK_PORT=3000
+python3 server.py
+```
+
+然后打开浏览器 http://127.0.0.1:3000/
+
+
+
+**完整部署**
+
+* 安装`nginx`，使用项目中`nginx.conf`的配置，起到反向代理的作用，避免 CORS
+
+  ```nginx
+  server {
+      listen 5000;
+      server_name localhost;
+  
+      location / {
+          proxy_pass http://localhost:3000/; # node 服务器地址
+      }
+  
+      location /api/ {
+          proxy_pass http://localhost:3001;  # python 服务器地址
+      }
+  }
+  ```
+
+  然后启动 nginx 服务
+
+* 启动 node 服务器：
+
+  ```bash
+  yarn build
+  export NITRO_PORT=3000
+  node .output/server/index.mjs
+  ```
+
+* 启动 flask 服务器
+
+  ```shell
+  export FLASK_PORT=3001
+  python3 server.py
+  ```
+
+如果部署无误，现在打开浏览器 http://127.0.0.1:5000/ 就能看到网页了。
+
+
+
+## 困难与解决
+
+### 纯CSS实现界面工作量太大
+
+所以本次作业的登陆界面直接使用大量图片来完成UI界面，优点是写起来确实快了，缺点是灵活性低、不能直接通过纯CSS方案实现配色切换。此外，直接切图、贴图的方法不利于多端适配，实际测试在手机上无法显示该登录页左侧内容，如果使用响应式布局方案则可非常方便的适配手机端。
+
+现阶段已经有许多成熟的响应式布局CSS框架，例如 Bootstrap、Tailwind CSS等，但风格和`net.tsinghua.edu.cn`相差很大，所以本次作业没有使用这些框架。
+
+
+
+### 登陆状态管理
+
+状态管理代码集中在`composables/useUserAciton.ts`文件中，还包括登陆、登出、从服务器下载用户档案等功能，网页运行期间有且只有一份状态，避免混乱
+
+
+
+
+
+
+
