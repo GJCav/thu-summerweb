@@ -7,7 +7,24 @@
 </template>
 
 <script setup lang="ts">
-import * as echarts from 'echarts';
+import * as echarts from 'echarts/core';
+import {
+  TitleComponent,
+  TooltipComponent,
+  GridComponent,
+} from 'echarts/components';
+import { LineChart } from 'echarts/charts';
+import { UniversalTransition } from 'echarts/features';
+import { CanvasRenderer } from 'echarts/renderers';
+
+echarts.use([
+  TitleComponent,
+  TooltipComponent,
+  GridComponent,
+  LineChart,
+  CanvasRenderer,
+  UniversalTransition
+]);
 
 const chartDomRef = ref(null);
 
@@ -107,7 +124,7 @@ function updateChart(){
         name: j["duration"], // 必须有这一项，不然折线会上下跳动
         value: [j["duration"] as number, j["flow_volume"]]
       })
-      myChart.setOption<echarts.EChartsOption>({
+      myChart.setOption({
       series: [
         {
           data: data
