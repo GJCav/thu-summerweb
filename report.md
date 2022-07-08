@@ -4,7 +4,7 @@
 
 电脑端效果：
 
-<img src=".typora\image-20220707223452146.png" alt="image-20220707223452146" style="zoom:50%;" />
+![image-20220709020428105](.typora/image-20220709020428105.png)
 
 
 
@@ -12,7 +12,9 @@
 
 手机端效果：
 
-<img src=".typora/image-20220707223613514.png" alt="image-20220707223613514" style="zoom:50%;" />
+<img src=".typora/image-20220709021515739.png" alt="image-20220709021515739" style="zoom: 33%;" />
+
+
 
 
 
@@ -20,15 +22,33 @@
 
 ### 测试账号与API
 
-内置两个账号`alice`、`bob`，密码和账号名相同，若在测试过程中发现已用流量数值过大，可以访问 https://hw2-websummer.gjm20.top/api/reset 来重置流量记录
+内置两个账号`alice`、`bob`，密码和账号名相同，若在测试过程中发现已用流量数值过大，可以访问 https://hw3-websummer.gjm20.top/api/reset 来重置流量记录
 
 
 
 ### 快速访问
 
-使用浏览器打开 https://hw2-websummer.gjm20.top，即可查看效果。
+使用浏览器打开 https://hw3-websummer.gjm20.top，登陆，然后在登陆成功页面可以看到一个“查看流量表”的超链接，点击即可。
 
 注：因为是使用自己的服务器托管的，是一个5Mbps的小水管，加载速度可能较慢。
+
+
+
+### 与作业要求不一致特别说明
+
+作业中对数据更新行为作出了非常明确的要求，但作业完成过程中发现作业要求下的效果较差，所以作出下列修改：
+
+* 为了缩短等待时间，折线图每 500ms 更新一次
+* 折线图显示最近30个时刻的使用情况，数据点间距不固定的2s，而是由服务器记录的实际连接时长
+
+若需修改上述效果，可打开`pages/flowchart.vue`，找到如下几行进行修改：
+
+```typescript
+const interval = 500; // 数据更新间隔时间
+const dataLen = 30;   // 显示数据点个数
+```
+
+
 
 
 
@@ -41,6 +61,7 @@
 * `sass`：让写CSS的血压稍稍降低
 * `flask`：后端框架
 * `eventlet`：支持高并发的 WSGI 容器
+* `echarts`：绘图库
 
 
 
@@ -56,7 +77,7 @@
 ```bash
 git clone https://github.com/GJCav/thu-summerweb.git
 cd thu-summerweb
-git checkout homework2
+git checkout homework3
 yarn install
 
 pip3 install -r requirements.txt
@@ -128,17 +149,81 @@ python3 server.py
 
 ## 困难与解决
 
-### 纯CSS实现界面工作量太大
+### 适配不同设备
 
-所以本次作业的登陆界面直接使用大量图片来完成UI界面，优点是写起来确实快了，缺点是灵活性低、不能直接通过纯CSS方案实现配色切换。此外，直接切图、贴图的方法不利于多端适配，实际测试在手机上无法显示该登录页左侧内容，如果使用响应式布局方案则可非常方便的适配手机端。
+**问题一**
 
-现阶段已经有许多成熟的响应式布局CSS框架，例如 Bootstrap、Tailwind CSS等，但风格和`net.tsinghua.edu.cn`相差很大，所以本次作业没有使用这些框架。
+需求：对于宽屏幕：水平居中显示；对于窄屏幕，全宽度显示
+
+解决：scss代码核心如下：
+
+```scss
+.container{
+  width: 100%;
+
+  box-sizing: border-box;
+
+  @media screen and (min-width: 720px) {
+    width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+```
 
 
 
-### 登陆状态管理
+**问题二**
 
-状态管理代码集中在`composables/useUserAciton.ts`文件中，还包括登陆、登出、从服务器下载用户档案等功能，网页运行期间有且只有一份状态，避免混乱
+问题：vue 挂载时，DOM还未渲染完成，需要一个合适的时机将echart加载到页面上
+
+解决：DOM ref，保证DOM Element 不为 null
+
+```html
+<template>
+<div ref="chartDomRef" class="chart"></div>
+</template>
+
+<script setup>
+const chartDomRef = ref(null);
+//...
+myChart = echarts.init(chartDomRef.value);
+</script>
+```
 
 
 
+
+
+**问题三**
+
+echart 绘制区域跟随窗口变化，同时在屏幕非常窄的时候将y轴标签内置，利用 window.onresize 事件：
+
+```typescript
+function resizeChart(){
+  if(myChart != null){
+    let width = chartDomRef.value.clientWidth;
+    let height = width * 0.6;
+    myChart.resize({width: width, height: height})
+    if(width < 400){
+      myChart.setOption({
+        yAxis:{
+          axisLabel:{
+            inside: true
+          }
+        }
+      })
+    }else{
+      myChart.setOption({
+        yAxis:{
+          axisLabel:{
+            inside: false
+          }
+        }
+      })
+    }
+  }
+}
+
+window.onresize = resizeChart
+```
