@@ -24,8 +24,8 @@
               <h3 class="flow-volumn-text" style="margin:auto 0 auto 0.5em">{{status_flow_str}}</h3>
             </div>
           </VolumeBar>
+          <NuxtLink to="/flowchart" class="link-to-detail">查看流量表</NuxtLink>
         </div>
-        
       </div>
       <div class="button-box">
         <div class="tri"></div>
@@ -59,6 +59,7 @@
 
 <script setup lang="ts">
 import sprintf from 'voca/sprintf.js'
+import { bytesToString, durationToString } from '~~/composables/useUserAction';
 
 const profile = useUserProfile()
 
@@ -73,18 +74,12 @@ function incTimeDelta(){
 }
 
 const status_duration_str = computed(() => {
-  let sec = profile.value.duration + timeDelta.value
-  let hour = Math.floor(sec / 60 / 60)
-  sec -= hour * 60 * 60
-  let min = Math.floor(sec / 60)
-  sec -= min * 60
-  sec = Math.floor(sec)
-  return sprintf("%02d:%02d:%02d", hour, min, sec)
+  return durationToString(profile.value.duration + timeDelta.value)
 })
 
 // const status_flow_volumn = ref(43.96 * 1024 * 1024 * 1024) // uint: byte
 const status_flow_str = computed(() => {
-  return sprintf("%.2fG", profile.value.flow_volume / 1024 / 1024 / 1024)
+  return bytesToString(profile.value.flow_volume);
 })
 const status_flow_bar_val = computed(() => {
   return profile.value.flow_volume / 1024 / 1024 / 1024 / 50
@@ -198,7 +193,7 @@ $theme-color: style.$theme-color;
 
       display: grid;
       grid-template-columns: min-content auto;
-      grid-template-rows: auto auto;
+      grid-template-rows: auto auto auto;
       grid-gap: 10px;
 
       .title {
@@ -216,8 +211,15 @@ $theme-color: style.$theme-color;
       .flow-volumn-text {
         overflow: visible; 
         word-break: keep-all;
+        white-space: nowrap;
         color: grey;
         vertical-align: middle;
+      }
+
+      .link-to-detail{
+        font-size: small;
+        grid-column: 1/3;
+        margin-top: 10px;;
       }
     }
   }

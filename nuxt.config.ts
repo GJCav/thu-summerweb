@@ -6,5 +6,9 @@ export default defineNuxtConfig({
         compilerOptions: {
             isCustomElement: tag => ["marquee"].includes(tag)
         }
-    }
+    },
+    build: {
+        transpile: [/echarts/],
+    },
+    ssr: false //保证 EChart 能正常工作
 })

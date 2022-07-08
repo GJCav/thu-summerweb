@@ -97,6 +97,16 @@ def logout():
     }
 
 
+@app.route("/api/flow")
+def incFlow():
+    name = session.get("name", None)
+    if not name or name not in userdb:
+        abort(403)
+    
+    inc = int(request.args.get("inc", "0", int))
+    userdb[name]["volume"] += inc
+    return getProfile(name)
+
 @app.route("/api/reset")
 def reset():
     for k in userdb:

@@ -12,6 +12,7 @@
     "sass": "^1.53.0"
   },
   "dependencies": {
+    "echarts": "^5.3.3",
     "voca": "^1.4.0"
   }
 }

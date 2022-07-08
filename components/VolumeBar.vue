@@ -63,7 +63,7 @@ const bar_style = computed(() => {
 
   .bar {
     grid-row: 2;
-    grid-column: 1/5;
+    grid-column: 1/6;
     height: 25px;
 
     background-color: lighten(style.$theme-color, 30%);
