@@ -96,7 +96,7 @@ function initChart(){
       axisLabel: {
         formatter: function (value) {
           return bytesToString(value)
-        }
+        },
       }
     },
     series: [
@@ -141,6 +141,23 @@ function resizeChart(){
     let width = chartDomRef.value.clientWidth;
     let height = width * 0.6;
     myChart.resize({width: width, height: height})
+    if(width < 400){
+      myChart.setOption({
+        yAxis:{
+          axisLabel:{
+            inside: true
+          }
+        }
+      })
+    }else{
+      myChart.setOption({
+        yAxis:{
+          axisLabel:{
+            inside: false
+          }
+        }
+      })
+    }
   }
 }
 
